@@ -1,67 +1,13 @@
 import pygame
 
-"""
-background = (0, 0, 0)
-pygame.init()
-win = pygame.display.set_mode((500, 500))
-frame_size = pygame.display.get_surface().get_size()
-pygame.display.set_caption("first game")
-
-x = 50
-y = 50
-width = 40
-height = 60
-delta = 2
-jumping = False
-velocity = 0
-
-jump_force = 10
-gravity = 0.2
-
-run = True
-while run:
-    pygame.time.delay(10)
-    keys = pygame.key.get_pressed()
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
-            run = False
-
-
-
-    if (keys[pygame.K_LEFT] or keys[pygame.K_a]) and 0 < x < frame_size[0] - width:
-        x -= delta
-    if (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and 0 < x < frame_size[0] - width:
-        x += delta
-    if (keys[pygame.K_UP] or keys[pygame.K_w]) and not jumping:
-        jumping = True
-        velocity = jump_force
-
-    if jumping:
-        if velocity < -jump_force:
-            jumping = False
-            velocity = 0
-        else:
-            y -= velocity
-            velocity -= gravity
-    if any(pygame.mouse.get_pressed()):
-        x, y = pygame.mouse.get_pos()
-        x -= width // 2
-        y -= height // 2
-
-
-
-    win.fill(background)
-    pygame.draw.rect(win, (255, 0, 0), (x, y, width, height))
-    pygame.display.update()
-
-pygame.quit()
-"""
-
-
 class Board:
-    def __init__(self, x: int, y: int):
+    def __init__(self, width, height, win):
         # 0 represents empty
         self.grid = [[0] * 9] * 9
+        self.win = win
+        self.width = width
+        self.height = height
+        self.paint()
 
     def next_empty(self) -> (int, int):
         for y in range(len(self.grid)):
@@ -95,17 +41,28 @@ class Board:
 
         return False
 
+    def paint(self):
+        width = self.width // 9
+        height = self.width // 9
+        for j in range(9):
+            y = j * height
+            for i in range(9):
+                x = i * width
+                pygame.draw.lines(win, (255, 0, 0), True,
+                                  [(x, y), (x + width, y), (x + width, y + height), (x, y + height)], 2)
 
 
-background = (0, 0, 0)
+background = (255, 255, 255)
 pygame.init()
-win = pygame.display.set_mode((500, 500))
+win = pygame.display.set_mode((800, 800))
 frame_size = pygame.display.get_surface().get_size()
 pygame.display.set_caption("first game")
 run = True
+b = Board(500, 500, win)
 while run:
-    pygame.time.delay(100)
+    # pygame.time.delay()
     keys = pygame.key.get_pressed()
+    win.fill(background)
     if keys[pygame.K_ESCAPE]:
         run = False
         print('changed run status')
@@ -115,10 +72,6 @@ while run:
             run = False
         elif event.type == pygame.KEYDOWN:
             pass
-
-    """    
-    win.fill(background)
-    pygame.draw.rect(win, (255, 0, 0), (x, y, width, height))
+    b.paint()
     pygame.display.update()
-    pygame.quit()
-    """
+pygame.quit()
